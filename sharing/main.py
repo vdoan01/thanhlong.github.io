@@ -87,34 +87,7 @@ class Thread_scanner(QThread):
 
         except Exception as e:
             logging.warning("Cannot open com for epass"+e)
-
-
-# class Thread_scanner2(QThread):
-#     get_epass = pyqtSignal(str)
-#     serialPort = None
-#
-#     def run(self):
-#
-#         try:
-#             port = MainWindow.io_db.all()[0]["com_scanner2"]
-#
-#             try:
-#                 Thread_scanner2.serialPort = serial.Serial(port, baudrate=9600,
-#                                        bytesize=8, timeout=0.1, stopbits=serial.STOPBITS_ONE)
-#                 while (1):
-#                     if (Thread_scanner2.serialPort.in_waiting > 0):
-#                         serialString = Thread_scanner2.serialPort.readline().decode()
-#                         self.get_epass.emit(serialString)
-#             except Exception as e:
-#                 logging.warning(e)
-#
-#         except Exception as e:
-#             logging.warning(e)
-#
-#     def quit(self):
-#         Thread_scanner2.serialPort.close()
-
-
+            
 class recheck_single(QThread):
 
     changePixmap = pyqtSignal(np.ndarray)
@@ -200,20 +173,7 @@ class Thread(QThread):
                     res_dict[r.tag] = res
                     self.save_data.emit(detected, res, str(r.tag))
                 MainWindow.result_image[str(r.tag)] = detected
-
-                # exec inspection
-
-            # sq = list(MainWindow.inspection_sq.keys())[0]
-            # for i in list(MainWindow.inspection_sq.values())[0]:
-            #     print(f"Start inspecting {i}...")
-            #     specs = MainWindow.sq_db.search(MainWindow.query_sq.name == sq)[0]['sequence_items'][i]
-            #     detected, res = inspection_modes.inspection_modes[i]([frame] + specs)
-            #     if detected is not None:
-            #         self.changePixmap.emit(detected)
-            #     self.update_item_status.emit(i, res)
-            #     res_dict[i] = res
-            # print(res_dict)
-            #
+                
             if False in list(res_dict.values()):
                 self.update_f_res.emit(False)
             else:
@@ -1381,14 +1341,6 @@ class PWindow(QtWidgets.QWidget):
             logging.warning(e)
 
     def convert_nparray_to_QPixmap(self, img):
-        # w, h, ch = img.shape
-        # # Convert resulting image to pixmap
-        # if img.ndim == 1:
-        #     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-        #
-        # qimg = QImage(img.data, h, w, 3 * h, QImage.Format_RGB888)
-        # qpixmap = QPixmap(qimg)
-
         qformat = QtGui.QImage.Format_Indexed8
         if len(img.shape) == 3:
             if img.shape[2] == 4:
